@@ -2,11 +2,11 @@ import type { Component } from 'solid-js';
 import { render } from 'solid-testing-library';
 import { Suspense } from 'solid-js';
 
-const HookComponent: Component<{
-  hook: () => any;
+const PrimitiveComponent: Component<{
+  primitive: () => any;
   updatePrimitive: (payload: any) => void;
 }> = (props) => {
-  const current = props.hook();
+  const current = props.primitive();
   props.updatePrimitive(current);
   return null;
 };
@@ -17,7 +17,7 @@ interface RenderOption {
   wrapper?: Component;
 }
 
-export default function renderPrimitive<T>(hook: () => T, option: RenderOption = {}) {
+export default function renderPrimitive<T>(primitive: () => T, option: RenderOption = {}) {
   let currentPrimitive: T;
 
   const updatePrimitive = function (val: T) {
@@ -34,7 +34,7 @@ export default function renderPrimitive<T>(hook: () => T, option: RenderOption =
       return (
         <WrapperComponent>
           <Suspense fallback={<FallbackComponent />}>
-            <HookComponent hook={hook} updatePrimitive={updatePrimitive} />
+            <PrimitiveComponent primitive={primitive} updatePrimitive={updatePrimitive} />
           </Suspense>
         </WrapperComponent>
       );
