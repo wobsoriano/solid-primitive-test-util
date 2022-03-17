@@ -17,7 +17,7 @@ interface RenderOption {
   wrapper?: Component;
 }
 
-export default function renderPrimitive<T>(primitive: () => T, option: RenderOption = {}) {
+export function renderPrimitive<T>(primitive: () => T, option: RenderOption = {}) {
   let currentPrimitive: T;
 
   const updatePrimitive = function (val: T) {
@@ -50,3 +50,5 @@ export default function renderPrimitive<T>(primitive: () => T, option: RenderOpt
     result: currentPrimitive,
   };
 }
+
+export default renderPrimitive;
