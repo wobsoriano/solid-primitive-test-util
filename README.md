@@ -19,8 +19,8 @@ import { createSignal } from 'solid-js';
 
 export const createCounter = () => {
   const [count, setCount] = createSignal(0);
-  const inc = () => setCount((prev) => prev + 1);
-  return { count, inc };
+  const increment = () => setCount((prev) => prev + 1);
+  return { count, increment };
 };
 ```
 
@@ -34,7 +34,42 @@ test('should increment count', () => {
   const { result } = renderPrimitive(() => createCounter());
 
   expect(result.count()).toBe(0);
-  result.inc();
+  result.increment();
   expect(result.count()).toBe(1);
+});
+```
+
+### Wrapped Components
+
+Sometimes, primitives may need access to values or functionality outside of itself that are provided by a context provider or some other HOC.
+
+```tsx
+import { createSignal, createContext, useContext } from 'solid-js';
+
+const CounterStepContext = createContext(1);
+
+export const CounterStepProvider = (props) => (
+  <CounterStepContext.Provider value={props.step}>{props.children}</CounterStepContext.Provider>
+);
+
+export const createCounter = (initialValue = 0) => {
+  const [count, setCount] = createSignal(initialValue);
+  const step = useContext(CounterStepContext);
+  const increment = () => setCount((prev) => prev + step);
+  return { count, increment };
+};
+```
+
+In our test, we simply use CoounterStepProvider as the wrapper when rendering the primitive:
+
+```tsx
+import { renderPrimitive } from 'solid-primitive-test-util';
+import { CounterStepProvider, creatCounter } from './counter';
+
+test('should use custom step when incrementing', () => {
+  const wrapper = (props) => <CounterStepProvider step={2}>{props.children}</CounterStepProvider>;
+  const { result } = renderHook(() => creatCounter(), { wrapper });
+  result.increment();
+  expect(result.count()).toBe(2);
 });
 ```
