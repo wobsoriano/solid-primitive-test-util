@@ -60,7 +60,7 @@ export const createCounter = (initialValue = 0) => {
 };
 ```
 
-In our test, we simply use CoounterStepProvider as the wrapper when rendering the primitive:
+In our test, we simply use CounterStepProvider as the wrapper when rendering the primitive:
 
 ```tsx
 import { renderPrimitive } from 'solid-primitive-test-util';
@@ -73,3 +73,7 @@ test('should use custom step when incrementing', () => {
   expect(result.count()).toBe(2);
 });
 ```
+
+## License
+
+MIT
