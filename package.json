@@ -35,7 +35,7 @@
   },
   "devDependencies": {
     "bumpp": "^7.1.1",
-    "happy-dom": "^2.47.0",
+    "jsdom": "^19.0.0",
     "nock": "^13.2.4",
     "rollup": "^2.58.0",
     "rollup-preset-solid": "^1.4.0",
