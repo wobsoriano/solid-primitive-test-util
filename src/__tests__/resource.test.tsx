@@ -1,6 +1,5 @@
 import { createResource } from 'solid-js';
-import { test, expect, describe } from 'vitest';
-import renderPrimitive from '../src';
+import renderPrimitive from '..';
 import nock from 'nock';
 import { waitFor } from 'solid-testing-library';
 
@@ -32,8 +31,8 @@ describe('createResource tests', () => {
         title: 'delectus aut autem',
         completed: false,
       });
-
-      expectation.done();
     });
+
+    expectation.done();
   });
 });

@@ -3,6 +3,7 @@ import solid from 'vite-plugin-solid';
 
 export default defineConfig({
   test: {
+    globals: true,
     environment: 'happy-dom',
     transformMode: {
       web: [/.[jt]sx?/],
