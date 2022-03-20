@@ -4,7 +4,7 @@ import solid from 'vite-plugin-solid';
 export default defineConfig({
   test: {
     globals: true,
-    environment: 'happy-dom',
+    environment: 'jsdom',
     transformMode: {
       web: [/.[jt]sx?/],
     },
@@ -13,6 +13,7 @@ export default defineConfig({
     },
     threads: false,
     isolate: false,
+    setupFiles: ['./vitest.setup.ts'],
   },
   plugins: [solid()],
   resolve: {

@@ -1,32 +1,51 @@
 import { createResource } from 'solid-js';
 import renderPrimitive from '..';
 import { waitFor } from 'solid-testing-library';
-import nock from 'nock';
-
-const basePath = 'https://jsonplaceholder.typicode.com';
-const path = '/todos/1';
-const data = {
-  userId: 1,
-  id: 1,
-  title: 'delectus aut asutem',
-  completed: false,
-};
+import { rest } from 'msw';
+import { setupServer } from 'msw/node';
 
 const testPrimitive = () => {
-  const [data] = createResource(() => fetch(`${basePath}${path}`).then((res) => res.json()));
+  const [data] = createResource(() => fetch('http://example.com/todos').then((res) => res.json()));
 
   return {
     data,
   };
 };
 
+const testData = [
+  {
+    id: 1,
+    title: 'buy milk',
+    completed: false,
+  },
+  {
+    id: 2,
+    title: 'clean desk',
+    completed: true,
+  },
+];
+
+const server = setupServer(
+  rest.get('http://example.com/todos', (req, res, ctx) => {
+    return res(
+      ctx.json({
+        data: testData,
+      }),
+    );
+  }),
+);
+
 describe('createResource tests', () => {
+  beforeAll(() => server.listen());
+  afterEach(() => server.resetHandlers());
+  afterAll(() => server.close());
+
   it('should return correct data', async () => {
-    const expectation = nock(basePath).get(path).reply(200, data);
     const { result } = renderPrimitive(() => testPrimitive());
     await waitFor(() => {
-      expect(result.data()).toEqual(data);
+      expect(result.data()).toEqual({
+        data: testData,
+      });
     });
-    expectation.done();
   });
 });
